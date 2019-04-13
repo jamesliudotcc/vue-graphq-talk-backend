@@ -27,6 +27,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret';
       hello: String
       users: [User]
       user(id: Int!): User!
+      secret: String
     }
     type Mutation {
       login(email: String!, password: String!): LoggedInUser
@@ -49,6 +50,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret';
       hello: () => 'world',
       users: () => users,
       user: (_: any, args: { id: number }) => find(users, { id: args.id }),
+      secret: () => 'secret',
     },
     Mutation: {
       login: async (_: any, { email, password }: User) => {
