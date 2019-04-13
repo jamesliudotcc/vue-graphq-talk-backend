@@ -6,13 +6,12 @@ import { find } from 'lodash';
 import * as argon2 from 'argon2';
 import * as dotenv from 'dotenv';
 import * as jwt from 'jsonwebtoken';
-import { findAddedNonNullDirectiveArgs } from 'graphql/utilities/findBreakingChanges';
 
 type User = { email: string; name: string; password?: string; id?: number };
 
 dotenv.config();
 
-const { JWT_SECRET } = process.env;
+const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 (async () => {
   const users: User[] = [
@@ -25,19 +24,23 @@ const { JWT_SECRET } = process.env;
   ];
   const typeDefs = gql`
     type Query {
-      "A simple type for getting started!"
       hello: String
       users: [User]
       user(id: Int!): User!
     }
     type Mutation {
-      register(email: String!, password: String!, name: String!): User
+      login(email: String!, password: String!): LoggedInUser
+      register(email: String!, password: String!, name: String!): LoggedInUser
     }
     type User {
       id: Int!
       email: String!
       password: String!
       name: String!
+    }
+    type LoggedInUser {
+      token: String
+      user: User
     }
   `;
 
@@ -48,6 +51,16 @@ const { JWT_SECRET } = process.env;
       user: (_: any, args: { id: number }) => find(users, { id: args.id }),
     },
     Mutation: {
+      login: async (_: any, { email, password }: User) => {
+        const foundUser = find(users, { email: email });
+
+        if (foundUser && (await argon2.verify(foundUser.password, password))) {
+          return {
+            token: generateJwt(foundUser),
+            user: { ...foundUser, password: '' },
+          };
+        }
+      },
       register: async (_: any, { email, password, name }: User) => {
         if (users.reduce((_, user) => email === user.email, false)) {
           // TODO: Provide better error message
@@ -61,7 +74,10 @@ const { JWT_SECRET } = process.env;
           id: users.length + 1,
         };
         users.push(newUser);
-        return newUser;
+        return {
+          token: generateJwt(newUser),
+          user: { ...newUser, password: 'haha, no' },
+        };
       },
     },
   };
@@ -72,5 +88,9 @@ const { JWT_SECRET } = process.env;
     console.log(`🚀  Server ready at ${url}`);
   });
 
-  console.log(jwt.sign(users[0], JWT_SECRET || 'secret'));
+  function generateJwt(user: User) {
+    return jwt.sign({ ...user, password: '' }, JWT_SECRET, {
+      expiresIn: '1d',
+    });
+  }
 })();
