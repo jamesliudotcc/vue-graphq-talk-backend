@@ -1,6 +1,6 @@
 # Simple Boilerplate for a GraphQL backend with Apollo Server, Express, and Typescript
 
-This is a simple boilerplate with authentication running.
+This is a simple boilerplate with authentication using JWTs. Presently not ready for production, but if you are learning GraphQL and need to stand up and tear down a server running on localhost with authentication, this may be a good place to start.
 
 Here are [some](https://hackernoon.com/three-ways-to-structure-your-graphql-code-with-apollo-server-4788beed89db) [hints](https://blog.apollographql.com/modularizing-your-graphql-schema-code-d7f71d5ed5f2) on organizing your code.
 
