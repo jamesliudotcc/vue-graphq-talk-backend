@@ -15,6 +15,8 @@ export type User = {
   id?: number;
 };
 
+// The, um, database, for now: an empty array that lives in memory
+
 export const users: User[] = [];
 
 export const typeDefs = gql`
@@ -78,6 +80,8 @@ export const resolvers = {
     },
   },
 };
+
+// Helper functions
 
 function generateJwt(user: User) {
   return jwt.sign({ ...user, password: '' }, JWT_SECRET, {
