@@ -5,7 +5,7 @@
   "author": "jamesliudotcc <james@jamesliu.cc>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec ts-node src/index.ts"
+    "start": "nodemon --exec ts-node src/index.ts -e ts,json,graphql"
   },
   "dependencies": {
     "apollo-server": "^2.4.8",
@@ -16,6 +16,7 @@
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "graphql": "^14.2.1",
+    "graphql-playground-middleware-express": "^1.7.12",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "passport": "^0.4.0",
@@ -31,6 +32,8 @@
     "@types/node": "^11.13.4",
     "@types/passport": "^1.0.0",
     "@types/passport-jwt": "^3.0.1",
-    "tslint-config-prettier": "^1.18.0"
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript-tslint-plugin": "^0.3.1"
   }
 }

@@ -1,53 +1,19 @@
-import { gql } from 'apollo-server';
+import { ForbiddenError, ValidationError } from 'apollo-server';
 import * as argon2 from 'argon2';
 import { find } from 'lodash';
-import * as jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
 
-dotenv.config();
-
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
-
-export type User = {
-  email: string;
-  name: string;
-  password?: string;
-  id?: number;
-};
-
-// The, um, database, for now: an empty array that lives in memory
-
-export const users: User[] = [];
-
-export const typeDefs = gql`
-  type Query {
-    hello: String
-    users: [User]
-    user(id: Int!): User!
-    secret: String
-  }
-  type Mutation {
-    login(email: String!, password: String!): LoggedInUser
-    register(email: String!, password: String!, name: String!): LoggedInUser
-  }
-  type User {
-    id: Int!
-    email: String!
-    password: String!
-    name: String!
-  }
-  type LoggedInUser {
-    token: String
-    user: User
-  }
-`;
+import { generateJwt } from './generateJwt';
+import { User, users } from './users';
 
 export const resolvers = {
   Query: {
     hello: () => 'world',
     users: () => users,
     user: (_: any, args: { id: number }) => find(users, { id: args.id }),
-    secret: () => 'secret',
+    secret: (root: any, args: any, context: any) => {
+      if (!context.user) throw new ForbiddenError('No secret for you');
+      return 'secret';
+    },
   },
   Mutation: {
     login: async (_: any, { email, password }: User) => {
@@ -62,10 +28,11 @@ export const resolvers = {
     },
     register: async (_: any, { email, password, name }: User) => {
       if (users.reduce((_, user) => email === user.email, false)) {
-        // TODO: Provide better error message
-        return null;
+        throw new ValidationError('Email already exists');
       }
+
       const hashedPass = await argon2.hash(password);
+
       const newUser = {
         email,
         name,
@@ -80,11 +47,3 @@ export const resolvers = {
     },
   },
 };
-
-// Helper functions
-
-function generateJwt(user: User) {
-  return jwt.sign({ ...user, password: '' }, JWT_SECRET, {
-    expiresIn: '1d',
-  });
-}
