@@ -43,4 +43,4 @@ And as a result, you can get a JWT token and the user info returned to you:
 
 Anybody can run `query { hello }` but a only a logged in user can run `query { secret }`. A user is logged in if a valid "authorization" header is passed in the HTTP headers. Use the JWT in the token field.
 
-An invalid token (incorecty copied, made up, expired, whatever) will result in an error. It is up to the front end to 
+An invalid token (incorecty copied, made up, expired, whatever) will result in an error. It is up to the front end to retry with no auth token.
