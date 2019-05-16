@@ -9,13 +9,14 @@ export const resolvers = {
   Query: {
     hello: () => 'world',
     users: () => users,
-    user: (_: any, args: { id: number }) => find(users, { id: args.id }),
+    user: (_: any, args: any, context: any) => context.user,
     secret: (root: any, args: any, context: any) => {
       if (!context.user) throw new ForbiddenError('No secret for you');
       return 'secret';
     },
     houses: (root: any, args: any, context: any) => {
-      if (!context.user) throw new ForbiddenError('No secret for you');
+      if (!context.user)
+        throw new ForbiddenError('Must be logged in to view houses');
       houses;
     },
   },

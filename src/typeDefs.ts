@@ -4,7 +4,7 @@ export const typeDefs = gql`
   type Query {
     hello: String
     users: [User]
-    user(id: Int!): User
+    user: User
     houses: [House]
     secret: String
   }
@@ -17,6 +17,7 @@ export const typeDefs = gql`
     email: String!
     password: String!
     name: String!
+    houses: [House]
   }
   type LoggedInUser {
     token: String
