@@ -4,7 +4,8 @@ export const typeDefs = gql`
   type Query {
     hello: String
     users: [User]
-    user(id: Int!): User!
+    user(id: Int!): User
+    houses: [House]
     secret: String
   }
   type Mutation {
@@ -22,19 +23,21 @@ export const typeDefs = gql`
     user: User
   }
   type House {
+    id: Int!
     name: String!
     users: [User]
     items: [Item]
   }
   type Item {
+    id: Int!
     name: String!
     qty: Int
     done: Boolean
     stores: [Store]
-    house: House!
     purchasedBy: User
   }
   type Store {
+    id: Int!
     name: String!
   }
 `;

@@ -3,7 +3,7 @@ import * as argon2 from 'argon2';
 import { find } from 'lodash';
 
 import { generateJwt } from './generateJwt';
-import { User, users } from './users';
+import { House, houses, User, users } from './model';
 
 export const resolvers = {
   Query: {
@@ -13,6 +13,10 @@ export const resolvers = {
     secret: (root: any, args: any, context: any) => {
       if (!context.user) throw new ForbiddenError('No secret for you');
       return 'secret';
+    },
+    houses: (root: any, args: any, context: any) => {
+      if (!context.user) throw new ForbiddenError('No secret for you');
+      houses;
     },
   },
   Mutation: {
