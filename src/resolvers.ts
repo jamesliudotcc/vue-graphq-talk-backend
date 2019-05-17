@@ -5,6 +5,8 @@ import { find } from 'lodash';
 import { generateJwt } from './generateJwt';
 import { House, houses, Store, stores, User, users, Item } from './model';
 
+type Context = { user: User | null };
+
 export const resolvers = {
   Query: {
     hello: () => 'world',
@@ -65,11 +67,7 @@ export const resolvers = {
         user: { ...newUser, password: 'haha, no' },
       };
     },
-    createHouse: (
-      root: any,
-      args: { name: string },
-      context: { user: User }
-    ) => {
+    createHouse: (root: any, args: { name: string }, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create house');
       const newHouseId = houses.length + 1;
