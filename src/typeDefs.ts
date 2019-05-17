@@ -11,6 +11,7 @@ export const typeDefs = gql`
   type Mutation {
     login(email: String!, password: String!): LoggedInUser
     register(email: String!, password: String!, name: String!): LoggedInUser
+    createHouse(name: String!): House
   }
   type User {
     id: Int!
@@ -26,7 +27,9 @@ export const typeDefs = gql`
   type House {
     id: Int!
     name: String!
-    users: [User]
+    users: [Int]
+    invitedUsers: [User]
+    requestingUsers: [User]
     items: [Item]
   }
   type Item {

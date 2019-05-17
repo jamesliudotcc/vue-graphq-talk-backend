@@ -29,6 +29,8 @@ export const resolvers = {
           token: generateJwt(foundUser),
           user: { ...foundUser, password: '' },
         };
+      } else {
+        throw new ForbiddenError('Credentials no good');
       }
     },
     register: async (_: any, { email, password, name }: User) => {
@@ -49,6 +51,17 @@ export const resolvers = {
         token: generateJwt(newUser),
         user: { ...newUser, password: 'haha, no' },
       };
+    },
+    createHouse: (root: any, args: { name: string }, context: any) => {
+      if (!context.user) throw new ForbiddenError('No secret for you');
+      const newHouse: House = {
+        id: houses.length + 1,
+        name: args.name,
+        users: [context.user.id],
+        items: [],
+      };
+      houses.push(newHouse);
+      return newHouse;
     },
   },
 };

@@ -42,7 +42,6 @@ app.listen({ port }, () => {
 
 function getUser(token: string) {
   try {
-    console.log(jwt.verify(token, JWT_SECRET));
     return jwt.verify(token, JWT_SECRET);
   } catch (err) {
     throw new AuthenticationError('Token is invalid');

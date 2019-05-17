@@ -1,5 +1,6 @@
+type UserId = number;
 export type User = {
-  id: number;
+  id: UserId;
   email: string;
   name: string;
   password?: string;
@@ -7,7 +8,7 @@ export type User = {
 export type House = {
   id: number;
   name: string;
-  users: User[];
+  users: UserId[];
   items: Item[];
 };
 export type Item = {
