@@ -14,7 +14,7 @@ export const typeDefs = gql`
     register(email: String!, password: String!, name: String!): LoggedInUser
     createHouse(name: String!): House
     createStore(name: String!): Store
-    createItem(name: String!, house: Int!, qty: Int!): Item
+    createItem(name: String!, house: Int!, stores: [Int], qty: Int!): Item
   }
   type User {
     id: Int!

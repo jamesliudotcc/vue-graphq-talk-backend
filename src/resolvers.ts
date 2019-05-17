@@ -18,17 +18,16 @@ export const resolvers = {
         houses: currentUser.houses.map(houseId => houses[houseId - 1]),
       };
     },
-    secret: (root: any, args: any, context: any) => {
+    secret: (root: any, args: any, context: Context) => {
       if (!context.user) throw new ForbiddenError('No secret for you');
       return 'secret';
     },
-    // TODO: Create an other houses type, only showing name and members
-    houses: (root: any, args: any, context: any) => {
+    houses: (root: any, args: any, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to view houses');
       return houses;
     },
-    stores: (root: any, args: any, context: any) => {
+    stores: (root: any, args: any, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to view stores');
       return stores;
@@ -85,7 +84,7 @@ export const resolvers = {
       });
       return newHouse;
     },
-    createStore: (root: any, args: { name: string }, context: any) => {
+    createStore: (root: any, args: { name: string }, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create store');
       const newStore: Store = {
@@ -102,17 +101,18 @@ export const resolvers = {
     ) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create item');
-      const house = houses[args.house];
+      const house = houses[args.house - 1];
       const newItem: Item = {
         id: house.items.length + 1,
         name: args.name,
         qty: args.qty,
-        stores: args.stores.map(storeId => stores[storeId]),
+        stores: args.stores.map(storeId => stores[storeId - 1]),
         done: false,
         purchasedBy: null,
       };
       house.items.push(newItem);
       return newItem;
     },
+    // TODO: Purchase item
   },
 };
