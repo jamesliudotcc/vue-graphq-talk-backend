@@ -14,6 +14,7 @@ export const typeDefs = gql`
     register(email: String!, password: String!, name: String!): LoggedInUser
     createHouse(name: String!): House
     createStore(name: String!): Store
+    createItem(name: String!, house: Int!, qty: Int!): Item
   }
   type User {
     id: Int!
@@ -29,8 +30,9 @@ export const typeDefs = gql`
   type House {
     id: Int!
     name: String!
-    users: [Int]
+    users: [Int] #Note, not users
     invitedUsers: [User]
+    # change to requestingInviteUsers
     requestingUsers: [User]
     items: [Item]
   }

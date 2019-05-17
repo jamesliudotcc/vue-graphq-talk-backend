@@ -4,7 +4,9 @@ export type User = {
   email: string;
   name: string;
   password?: string;
+  houses: HouseId[];
 };
+export type HouseId = number;
 export type House = {
   id: number;
   name: string;
@@ -17,7 +19,7 @@ export type Item = {
   qty: number;
   done: boolean;
   stores: Store[];
-  purchasedBy: User;
+  purchasedBy: User | null;
 };
 export type Store = {
   id: number;
