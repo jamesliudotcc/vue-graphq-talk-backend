@@ -6,6 +6,7 @@ export const typeDefs = gql`
     users: [User]
     user: User
     houses: [House]
+    stores: [Store]
     secret: String
   }
   type Mutation {

@@ -17,7 +17,12 @@ export const resolvers = {
     houses: (root: any, args: any, context: any) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to view houses');
-      houses;
+      return houses;
+    },
+    stores: (root: any, args: any, context: any) => {
+      if (!context.user)
+        throw new ForbiddenError('Must be logged in to view stores');
+      return stores;
     },
   },
   Mutation: {
