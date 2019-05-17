@@ -12,6 +12,7 @@ export const typeDefs = gql`
     login(email: String!, password: String!): LoggedInUser
     register(email: String!, password: String!, name: String!): LoggedInUser
     createHouse(name: String!): House
+    createStore(name: String!): Store
   }
   type User {
     id: Int!

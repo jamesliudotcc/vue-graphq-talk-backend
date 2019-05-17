@@ -3,7 +3,7 @@ import * as argon2 from 'argon2';
 import { find } from 'lodash';
 
 import { generateJwt } from './generateJwt';
-import { House, houses, User, users } from './model';
+import { House, houses, Store, stores, User, users } from './model';
 
 export const resolvers = {
   Query: {
@@ -53,7 +53,8 @@ export const resolvers = {
       };
     },
     createHouse: (root: any, args: { name: string }, context: any) => {
-      if (!context.user) throw new ForbiddenError('No secret for you');
+      if (!context.user)
+        throw new ForbiddenError('Must be logged in to create house');
       const newHouse: House = {
         id: houses.length + 1,
         name: args.name,
@@ -62,6 +63,16 @@ export const resolvers = {
       };
       houses.push(newHouse);
       return newHouse;
+    },
+    createStore: (root: any, args: { name: string }, context: any) => {
+      if (!context.user)
+        throw new ForbiddenError('Must be logged in to create store');
+      const newStore: Store = {
+        id: stores.length + 1,
+        name: args.name,
+      };
+      stores.push(newStore);
+      return newStore;
     },
   },
 };
