@@ -15,7 +15,7 @@ export const resolvers = {
       const currentUser = users.filter(user => user.id === context.user.id)[0];
       return {
         ...currentUser,
-        houses: currentUser.houses.map(houseId => houses[houseId - 1]),
+        houses: currentUser.houses.map(houseId => houses[houseId]),
       };
     },
     secret: (root: any, args: any, context: Context) => {
@@ -57,7 +57,7 @@ export const resolvers = {
         email,
         name,
         password: hashedPass,
-        id: users.length + 1,
+        id: users.length,
         houses: [],
       };
       users.push(newUser);
@@ -69,7 +69,7 @@ export const resolvers = {
     createHouse: (root: any, args: { name: string }, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create house');
-      const newHouseId = houses.length + 1;
+      const newHouseId = houses.length;
       const userId = context.user.id;
       const newHouse: House = {
         id: newHouseId,
@@ -88,7 +88,7 @@ export const resolvers = {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create store');
       const newStore: Store = {
-        id: stores.length + 1,
+        id: stores.length,
         name: args.name,
       };
       stores.push(newStore);
@@ -101,12 +101,12 @@ export const resolvers = {
     ) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create item');
-      const house = houses[args.house - 1];
+      const house = houses[args.house];
       const newItem: Item = {
-        id: house.items.length + 1,
+        id: house.items.length,
         name: args.name,
         qty: args.qty,
-        stores: args.stores.map(storeId => stores[storeId - 1]),
+        stores: args.stores.map(storeId => stores[storeId]),
         done: false,
         purchasedBy: null,
       };
