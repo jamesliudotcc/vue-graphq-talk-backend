@@ -4,7 +4,7 @@ export const typeDefs = gql`
   type Query {
     hello: String
     users: [User]
-    user: User
+    user(onlyUnpurchased: Boolean = true): User
     houses: [House]
     stores: [Store]
     secret: String
@@ -15,6 +15,7 @@ export const typeDefs = gql`
     createHouse(name: String!): House
     createStore(name: String!): Store
     createItem(name: String!, house: Int!, stores: [Int], qty: Int!): Item
+    purchaseItems(house: Int!, itemIds: [Int]!): [Item]
   }
   type User {
     id: Int!
@@ -42,7 +43,7 @@ export const typeDefs = gql`
     qty: Int
     done: Boolean
     stores: [Store]
-    purchasedBy: User
+    purchasedBy: Int
   }
   type Store {
     id: Int!

@@ -8,18 +8,19 @@ export type User = {
 };
 export type HouseId = number;
 export type House = {
-  id: number;
+  id: HouseId;
   name: string;
   users: UserId[];
   items: Item[];
 };
+export type ItemId = number;
 export type Item = {
-  id: number;
+  id: ItemId;
   name: string;
   qty: number;
   done: boolean;
   stores: Store[];
-  purchasedBy: User | null;
+  purchasedBy: UserId | null;
 };
 export type Store = {
   id: number;
