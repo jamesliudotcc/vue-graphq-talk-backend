@@ -15,13 +15,14 @@ import {
   ItemId,
 } from './model';
 
-type CreateItemType = {
+type CreateItemArgs = {
   name: string;
   house: number;
   qty: number;
   stores: number[];
 };
 type Context = { user: User | null };
+type PurchaseItemsArgs = { house: HouseId; itemIds: ItemId[] };
 
 export const resolvers = {
   Query: {
@@ -118,7 +119,7 @@ export const resolvers = {
       stores.push(newStore);
       return newStore;
     },
-    createItem: (root: unknown, args: CreateItemType, context: Context) => {
+    createItem: (root: unknown, args: CreateItemArgs, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create item');
       const house = houses[args.house];
@@ -135,7 +136,7 @@ export const resolvers = {
     },
     purchaseItems: (
       root: unknown,
-      args: { house: HouseId; itemIds: ItemId[] },
+      args: PurchaseItemsArgs,
       context: Context
     ) => {
       if (!context.user)
