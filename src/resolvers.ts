@@ -15,6 +15,12 @@ import {
   ItemId,
 } from './model';
 
+type CreateItemType = {
+  name: string;
+  house: number;
+  qty: number;
+  stores: number[];
+};
 type Context = { user: User | null };
 
 export const resolvers = {
@@ -55,7 +61,7 @@ export const resolvers = {
     },
   },
   Mutation: {
-    login: async (_: any, { email, password }: User) => {
+    login: async (root: unknown, { email, password }: User) => {
       const foundUser = find(users, { email: email });
 
       if (foundUser && (await argon2.verify(foundUser.password, password))) {
@@ -67,7 +73,7 @@ export const resolvers = {
         throw new ForbiddenError('Credentials no good');
       }
     },
-    register: async (root: any, { email, password, name }: User) => {
+    register: async (root: unknown, { email, password, name }: User) => {
       if (users.reduce((_, user) => email === user.email, false)) {
         throw new ValidationError('Email already exists');
       }
@@ -87,7 +93,7 @@ export const resolvers = {
         user: { ...newUser, password: 'haha, no' },
       };
     },
-    createHouse: (root: any, args: { name: string }, context: Context) => {
+    createHouse: (root: unknown, args: { name: string }, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create house');
       const newHouseId = houses.length;
@@ -102,7 +108,7 @@ export const resolvers = {
       users[userId].houses.push(newHouseId);
       return newHouse;
     },
-    createStore: (root: any, args: { name: string }, context: Context) => {
+    createStore: (root: unknown, args: { name: string }, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create store');
       const newStore: Store = {
@@ -112,11 +118,7 @@ export const resolvers = {
       stores.push(newStore);
       return newStore;
     },
-    createItem: (
-      root: unknown,
-      args: { name: string; house: number; qty: number; stores: number[] },
-      context: Context
-    ) => {
+    createItem: (root: unknown, args: CreateItemType, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create item');
       const house = houses[args.house];
