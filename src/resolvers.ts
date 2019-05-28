@@ -14,7 +14,7 @@ import {
   Item,
   ItemId,
 } from './model';
-
+u
 type CreateItemArgs = {
   name: string;
   house: number;
@@ -22,13 +22,14 @@ type CreateItemArgs = {
   stores: number[];
 };
 type Context = { user: User | null };
-type PurchaseItemsArgs = { house: HouseId; itemIds: ItemId[] };
+type PurchaseArgs = { house: HouseId; itemIds: ItemId[] };
 
 export const resolvers = {
   Query: {
     hello: () => 'world',
     users: () => users.map(user => ({ ...user, houses: null })),
     user: (_: any, args: { onlyUnpurcahsed: boolean }, context: any) => {
+      console.log(args);
       const getUserFromContext = users.filter(
         user => user.id === context.user.id
       )[0];
@@ -134,11 +135,7 @@ export const resolvers = {
       house.items.push(newItem);
       return newItem;
     },
-    purchaseItems: (
-      root: unknown,
-      args: PurchaseItemsArgs,
-      context: Context
-    ) => {
+    purchaseItems: (root: unknown, args: PurchaseArgs, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to mark as purchased');
       console.log(args.itemIds);
