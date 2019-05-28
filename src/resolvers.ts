@@ -14,7 +14,7 @@ import {
   Item,
   ItemId,
 } from './model';
-u
+
 type CreateItemArgs = {
   name: string;
   house: number;
