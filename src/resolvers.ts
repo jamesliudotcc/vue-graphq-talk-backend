@@ -48,6 +48,7 @@ export const resolvers = {
       };
     },
     secret: (root: any, args: any, context: Context) => {
+      console.log(context);
       if (!context.user) throw new ForbiddenError('No secret for you');
       return 'secret';
     },
