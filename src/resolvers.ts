@@ -33,7 +33,8 @@ export const resolvers = {
       const getIdUserFromContext = users.filter(
         user => user.id === context.user.id
       )[0];
-      const currentUser = userWithHouses(getIdUserFromContext);
+      const currentUser = getIdUserFromContext;
+      return userWithHouses(currentUser);
     },
     secret: (root: any, args: any, context: Context) => {
       console.log(context);
