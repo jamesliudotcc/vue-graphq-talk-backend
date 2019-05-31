@@ -4,7 +4,7 @@ export type User = {
   email: string;
   name: string;
   password?: string;
-  houses: HouseId[];
+  houseIds: HouseId[];
 };
 export type HouseId = number;
 export type House = {

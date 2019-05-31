@@ -21,11 +21,12 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => {
-    const token = req.headers.authorization || null;
-    if (!token) return null;
-
-    const user = getUser(token) || null;
-    return { user };
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.split('Bearer ')[1]; // In real life a middleware
+      console.log(token);
+      const user = getUser(token);
+      return { user };
+    }
   },
 });
 

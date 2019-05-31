@@ -29,23 +29,11 @@ export const resolvers = {
     hello: () => 'world',
     users: () => users.map(user => ({ ...user, houses: null })),
     user: (_: any, args: { onlyUnpurcahsed: boolean }, context: any) => {
-      console.log(args);
-      const getUserFromContext = users.filter(
+      console.log(context);
+      const getIdUserFromContext = users.filter(
         user => user.id === context.user.id
       )[0];
-      const currentUser = {
-        ...getUserFromContext,
-        houses: getUserFromContext.houses.map(houseId => houses[houseId]),
-      };
-
-      if (!args.onlyUnpurcahsed) return currentUser;
-
-      return {
-        ...currentUser,
-        houses: currentUser.houses.map(house =>
-          house.items.filter(item => !item.done)
-        ),
-      };
+      const currentUser = userWithHouses(getIdUserFromContext);
     },
     secret: (root: any, args: any, context: Context) => {
       console.log(context);
@@ -70,7 +58,7 @@ export const resolvers = {
       if (foundUser && (await argon2.verify(foundUser.password, password))) {
         return {
           token: generateJwt(foundUser),
-          user: { ...foundUser, password: '' },
+          user: userWithHouses(foundUser),
         };
       } else {
         throw new ForbiddenError('Credentials no good');
@@ -88,12 +76,12 @@ export const resolvers = {
         name,
         password: hashedPass,
         id: users.length,
-        houses: [],
+        houseIds: [],
       };
       users.push(newUser);
       return {
         token: generateJwt(newUser),
-        user: { ...newUser, password: 'haha, no' },
+        user: userWithHouses(newUser),
       };
     },
     createHouse: (root: unknown, args: { name: string }, context: Context) => {
@@ -108,7 +96,7 @@ export const resolvers = {
         items: [],
       };
       houses.push(newHouse);
-      users[userId].houses.push(newHouseId);
+      users[userId].houseIds.push(newHouseId);
       return newHouse;
     },
     createStore: (root: unknown, args: { name: string }, context: Context) => {
@@ -152,3 +140,11 @@ export const resolvers = {
     },
   },
 };
+
+function userWithHouses(userInfo: User) {
+  return {
+    ...userInfo,
+    houses: userInfo.houseIds.map(houseId => houses[houseId]),
+    password: 'yeah, no',
+  };
+}
