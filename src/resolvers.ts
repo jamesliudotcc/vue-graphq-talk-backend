@@ -88,8 +88,10 @@ export const resolvers = {
     createHouse: (root: unknown, args: { name: string }, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create house');
+
       const newHouseId = houses.length;
       const userId = context.user.id;
+
       const newHouse: House = {
         id: newHouseId,
         name: args.name,
@@ -100,9 +102,21 @@ export const resolvers = {
       users[userId].houseIds.push(newHouseId);
       return newHouse;
     },
+    joinHouse: (root: unknown, args: { house: HouseId }, context: Context) => {
+      if (!context.user)
+        throw new ForbiddenError('Must be logged in to join house');
+
+      const userId = context.user.id;
+      const houseId = args.house;
+
+      houses[houseId].users.push(userId);
+      users[userId].houseIds.push(houseId);
+      return houses[houseId];
+    },
     createStore: (root: unknown, args: { name: string }, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create store');
+
       const newStore: Store = {
         id: stores.length,
         name: args.name,
@@ -113,7 +127,9 @@ export const resolvers = {
     createItem: (root: unknown, args: CreateItemArgs, context: Context) => {
       if (!context.user)
         throw new ForbiddenError('Must be logged in to create item');
+
       const house = houses[args.house];
+
       const newItem: Item = {
         id: house.items.length,
         name: args.name,
