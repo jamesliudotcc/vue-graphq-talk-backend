@@ -15,7 +15,7 @@ export const typeDefs = gql`
     createHouse(name: String!): House
     createStore(name: String!): Store
     createItem(name: String!, house: Int!, stores: [Int], qty: Int!): Item
-    purchaseItems(house: Int!, itemIds: [Int]!): [Item]
+    purchaseItems(house: Int!, itemIds: [Int]!): String
   }
   type User {
     id: Int!

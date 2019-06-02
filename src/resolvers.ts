@@ -137,7 +137,7 @@ export const resolvers = {
           }
         });
       });
-      return houses[args.house].items.filter(item => !item.done);
+      return ':ok';
     },
   },
 };
