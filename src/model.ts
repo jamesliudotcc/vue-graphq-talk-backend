@@ -33,3 +33,11 @@ export const users: User[] = [];
 export const houses: House[] = [];
 
 export const stores: Store[] = [];
+
+export function userWithHouses(userInfo: User) {
+  return {
+    ...userInfo,
+    houses: userInfo.houseIds.map(houseId => houses[houseId]),
+    password: 'yeah, no',
+  };
+}

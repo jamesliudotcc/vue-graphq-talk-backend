@@ -13,6 +13,7 @@ import {
   users,
   Item,
   ItemId,
+  userWithHouses,
 } from './model';
 
 type CreateItemArgs = {
@@ -157,11 +158,3 @@ export const resolvers = {
     },
   },
 };
-
-function userWithHouses(userInfo: User) {
-  return {
-    ...userInfo,
-    houses: userInfo.houseIds.map(houseId => houses[houseId]),
-    password: 'yeah, no',
-  };
-}
