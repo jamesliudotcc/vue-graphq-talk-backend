@@ -1,0 +1,19 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "13:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@types/passport-jwt"
+    versions:
+    - 3.0.3
+    - 3.0.4
+  - dependency-name: "@types/passport"
+    versions:
+    - 1.0.5
+  - dependency-name: "@types/jsonwebtoken"
+    versions:
+    - 8.5.0
